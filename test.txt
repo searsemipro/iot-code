@@ -1,0 +1,92 @@
+import { StatusBar } from 'expo-status-bar';
+import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View, Image, Alert, Modal} from 'react-native';
+import { useState, useEffect } from 'react';
+import SampleModal from './SampleModal';
+
+export default function App() {
+  const [data, setData] = useState([])
+  const [useData, setuseData] = useState([])
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => setuseData(item)}>
+    <View style = {styles.item}>
+      <Image
+        style={styles.tinyLogo}
+        source= {{uri:"https://ionicframework.com/docs/icons/logo-react-icon.png"}}/>
+    <Text style = {styles.title}>{item.title}</Text>
+    </View>
+    </TouchableOpacity>
+  )
+
+  const randomData = () => {
+    return {
+      id: data.length+1,
+      title: `Number : ${data.length+1}`
+    }
+  }
+
+  const showAlert = () => {
+    Alert.alert(
+      "Are yo sure ?",
+      `Do you wnt to add ${data.length+1} into list?`
+      [
+        {
+          text: "Cancle",
+        },
+        {
+          text: "Accept",
+          onPless: () => setData([...data, randomData()])
+        }
+      ]
+    )
+  }
+
+    const [showModal, setShowModal] = useState(false)
+
+    useEffect(() => {
+      console.log(data)
+    }, [data])
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data= {data}
+        renderItem= {renderItem}
+        keyExtractor = {item => item.id}
+      />
+      <Button onPress ={ () => setData([...data, randomData()])} title='Add'/>
+      <SampleModal data = {useData}/>
+    </View>
+  );
+}
+
+
+//---------------------------------------------------------------------//
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 30,
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVerical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+  tinyLogo: {
+    width: 55,
+    height: 55
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+}
+});
